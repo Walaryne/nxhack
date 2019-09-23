@@ -34,7 +34,7 @@ commands readCommandMap(const std::map<std::string, commands> *cm, std::string k
 	}
 }
 
-unsigned long getTargetBaseAddress(pid_t pid) {
+unsigned long getTargetBaseAddress(pid_t pid) noexcept {
 	pid_t pidlist[2] {pid, 0};
 	proc_t** prt = readproctab(PROC_FILLSTAT | PROC_PID, pidlist);
 	return prt[0]->start_code;
@@ -70,9 +70,7 @@ int main(int argc, char **argv) {
 		std::vector<std::string> commandvec {""};
 		try {
 			commandvec = exp.explode();
-		} catch(se::exploderex &e) {
-
-		}
+		} catch(se::exploderex &e) {}
 		switch(readCommandMap(&commandmap, commandvec.front())) {
 		case(commands::SAVELOC):
 				tempX = pme.readProcessMemory<int>(addr + 0x14, false);
