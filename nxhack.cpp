@@ -51,18 +51,19 @@ int main(int argc, char **argv) {
 	}
 
 	xeno::ProcessMemoryEditor pme(pid);
-
-	auto addr = pme.readProcessMemory<unsigned long>(0x374030, true);
+	se::exploder exp(' ', true);
 
 	int tempX;
 	int tempY;
 	std::pair<int, int> tempPair;
-
 	unsigned long currentTeleportSlot = 0;
-	se::exploder exp(' ', true);
+
 	std::map<unsigned long, std::pair<int, int>> teleportMap;
+
 	std::string input {};
 	std::vector<std::string> commandvec;
+
+	auto addr = pme.readProcessMemory<unsigned long>(0x374030, true);
 
 	while(true) {
 		std::cout << ">: ";
