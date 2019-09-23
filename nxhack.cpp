@@ -58,9 +58,9 @@ int main(int argc, char **argv) {
 	int tempY;
 	std::pair<int, int> tempPair;
 
-	int currentTeleportSlot = 0;
+	unsigned long currentTeleportSlot = 0;
 	se::exploder exp(' ', true);
-	std::map<int, std::pair<int, int>> teleportMap;
+	std::map<unsigned long, std::pair<int, int>> teleportMap;
 	std::string input {};
 	std::vector<std::string> commandvec;
 
