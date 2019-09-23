@@ -34,12 +34,6 @@ commands readCommandMap(const std::map<std::string, commands> *cm, std::string k
 	}
 }
 
-unsigned long getTargetBaseAddress(pid_t pid) noexcept {
-	pid_t pidlist[2] {pid, 0};
-	proc_t** prt = readproctab(PROC_FILLSTAT | PROC_PID, pidlist);
-	return prt[0]->start_code;
-}
-
 int main(int argc, char **argv) {
 	pid_t pid = 0;
 
