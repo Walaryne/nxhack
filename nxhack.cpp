@@ -62,15 +62,17 @@ int main(int argc, char **argv) {
 	se::exploder exp(' ', true);
 	std::map<int, std::pair<int, int>> teleportMap;
 	std::string input {};
+	std::vector<std::string> commandvec;
 
 	while(true) {
 		std::cout << ">: ";
 		std::getline(std::cin, input);
 		exp.load(input);
-		std::vector<std::string> commandvec {""};
 		try {
 			commandvec = exp.explode();
-		} catch(se::exploderex &e) {}
+		} catch(se::exploderex &e) {
+			continue;
+		}
 		switch(readCommandMap(&commandmap, commandvec.front())) {
 		case(commands::SAVELOC):
 				tempX = pme.readProcessMemory<int>(addr + 0x14, false);
