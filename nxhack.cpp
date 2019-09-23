@@ -67,11 +67,11 @@ int main(int argc, char **argv) {
 		std::cout << ">: ";
 		std::getline(std::cin, input);
 		exp.load(input);
-		std::vector<std::string> commandvec;
+		std::vector<std::string> commandvec {""};
 		try {
 			commandvec = exp.explode();
 		} catch(se::exploderex &e) {
-			commandvec.push_back("");
+
 		}
 		switch(readCommandMap(&commandmap, commandvec.front())) {
 		case(commands::SAVELOC):
@@ -79,18 +79,18 @@ int main(int argc, char **argv) {
 				tempY = pme.readProcessMemory<int>(addr + 0x18, false);
 				tempPair = std::make_pair(tempX, tempY);
 				teleportMap[currentTeleportSlot] = tempPair;
-				std::cout << "Saved location X: " << tempX << ", Y: " << tempY << " to slot " << currentTeleportSlot << std::endl;
+				std::cout << "Saved location X: " << tempX << ", Y: " << tempY << " to slot " << currentTeleportSlot << "\n";
 				break;
 
 		case(commands::TELEPORT):
 				tempX = pme.readProcessMemory<int>(addr + 0x14, false);
 				tempY = pme.readProcessMemory<int>(addr + 0x18, false);
-				std::cout << "Currently at X: " << tempX << ", Y: " << tempY << std::endl;
+				std::cout << "Currently at X: " << tempX << ", Y: " << tempY << "\n";
 				tempX = teleportMap[currentTeleportSlot].first;
 				tempY = teleportMap[currentTeleportSlot].second;
 				pme.writeProcessMemory<int>(addr + 0x14, &tempX, false);
 				pme.writeProcessMemory<int>(addr + 0x18, &tempY, false);
-				std::cout << "Teleported to X: " << tempX << ", Y: " << tempY << std::endl;
+				std::cout << "Teleported to X: " << tempX << ", Y: " << tempY << "\n";
 				break;
 
 		case(commands::SLOT):
@@ -98,13 +98,13 @@ int main(int argc, char **argv) {
 				break;
 
 		case(commands::GETSLOT):
-				std::cout << "Current teleport slot: " << currentTeleportSlot << std::endl;
+				std::cout << "Current teleport slot: " << currentTeleportSlot << "\n";
 				break;
 
 		case(commands::EXIT):
 				std::exit(0);
 		default:
-				std::cout << "Unknown Command" << std::endl;
+				std::cout << "Unknown Command" << "\n";
 				break;
 		}
 	}
