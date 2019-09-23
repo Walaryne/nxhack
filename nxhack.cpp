@@ -54,11 +54,6 @@ int main(int argc, char **argv) {
 
 	auto addr = pme.readProcessMemory<unsigned long>(0x374030, true);
 
-	int savedPlayerX;
-	int savedPlayerY;
-	int currentPlayerX;
-	int currentPlayerY;
-
 	int tempX;
 	int tempY;
 	std::pair<int, int> tempPair;
