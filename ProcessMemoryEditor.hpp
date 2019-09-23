@@ -41,7 +41,7 @@ public:
 
 		nread = process_vm_readv(_pid, &local, 1, &remote, 1, 0);
 		if(nread != sizeof(retval)) {
-			std::cerr << "Error: No bytes could be read from given location" << std::endl;
+			std::cerr << "Error: No bytes could be read from given location -- hint: use sudo?" << std::endl;
 			return -1;
 		} else {
 			return retval;
@@ -65,7 +65,7 @@ public:
 
 		nread = process_vm_writev(_pid, &local, 1, &remote, 1, 0);
 		if(nread != sizeof(*value)) {
-			std::cerr << "Error: No bytes could be written to given location" << std::endl;
+			std::cerr << "Error: No bytes could be read from given location -- hint: use sudo?" << std::endl;
 			return -1;
 		} else {
 			return 0;
