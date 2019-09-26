@@ -50,6 +50,7 @@ int main(int argc, char **argv) {
 	int tempX;
 	int tempY;
 	std::pair<int, int> tempPair;
+	
 	unsigned long currentTeleportSlot = 0;
 	std::map<unsigned long, std::pair<int, int>> teleportMap;
 
