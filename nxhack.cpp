@@ -9,7 +9,7 @@
 #include "../StringExplosion/src/stringexplosion.hpp"
 
 enum commands {
-	ERROR = -1,
+	UNKN = -1,
 	SAVELOC,
 	TELEPORT,
 	SLOT,
@@ -30,7 +30,7 @@ commands readCommandMap(const std::map<std::string, commands> *cm, std::string k
 	try {
 		return cm->at(k);
 	} catch(std::out_of_range &e) {
-		return ERROR;
+		return UNKN;
 	}
 }
 
@@ -50,7 +50,7 @@ int main(int argc, char **argv) {
 	int tempX;
 	int tempY;
 	std::pair<int, int> tempPair;
-	
+
 	unsigned long currentTeleportSlot = 0;
 	std::map<unsigned long, std::pair<int, int>> teleportMap;
 
