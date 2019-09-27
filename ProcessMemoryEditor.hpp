@@ -13,9 +13,24 @@
 
 namespace xeno {
 
+
+/*
+* The process memory editor is a class providing two templated functions,
+* readProcessMemory and writeProcessMemory.
+*
+* These two functions accept similar arguments (in fact, the only difference
+* is that the write requires a value passed as a pointer for writing)
+*
+* They allow you to write any type to the memory of another process,
+* and read from an address returning any type (hopefully a correct one!).
+*
+* This allows for lots of possible uses, from game hacking to monitoring memory.
+*/
 class ProcessMemoryEditor {
 
 public:
+	//Constructor taking the PID of another process as an argument
+	//ProcessMemoryEditor(pid_t pid)
 	ProcessMemoryEditor(pid_t pid) {
 		_pid = pid;
 		pid_t pidlist[2] {pid, 0};
@@ -23,6 +38,16 @@ public:
 		_target_base_address = prt[0]->start_code;
 	}
 
+	/*
+	* Read from an address in another process' memory, returning any type you wish.
+	*
+	* The offset is the location in the other process' memory you'd like to read from.
+	*
+	* The boolean relativeToBase, specifies whether the offset given should
+	* be added to the target process' base address before a read is attempted.
+	*
+	* T readProcessMemory<typename T>(unsigned long offset, bool relativeToBase) 
+	*/
 	template<typename READTYPE>
 	READTYPE readProcessMemory(unsigned long offset, bool relativeToBase) {
 		struct iovec local;
@@ -48,6 +73,16 @@ public:
 		}
 	}
 
+	/*
+	* Write to an address in another process' memory, using any type you wish.
+	*
+	* The offset is the location in the other process' memory you'd like to write to.
+	*
+	* The boolean relativeToBase, specifies whether the offset given should
+	* be added to the target process' base address before a write is attempted.
+	*
+	* int writeProcessMemory<typename T>(unsigned long offset, bool relativeToBase) 
+	*/
 	template<typename WRITETYPE>
 	int writeProcessMemory(unsigned long offset, WRITETYPE* value, bool relativeToBase) {
 		struct iovec local;
