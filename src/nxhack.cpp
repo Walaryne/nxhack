@@ -26,7 +26,7 @@ const std::map<std::string, commands> commandmap {
 	{"exit", EXIT}
 };
 
-commands readCommandMap(const std::map<std::string, commands> *cm, std::string k) {
+inline commands readCommandMap(const std::map<std::string, commands> *cm, std::string k) {
 	try {
 		return cm->at(k);
 	} catch(std::out_of_range &e) {
