@@ -6,7 +6,7 @@
 #include <proc/readproc.h>
 #include <sys/uio.h>
 #include "ProcessMemoryEditor.hpp"
-#include "../StringExplosion/src/stringexplosion.hpp"
+#include "../../StringExplosion/src/stringexplosion.hpp"
 
 enum commands {
 	UNKN = -1,
