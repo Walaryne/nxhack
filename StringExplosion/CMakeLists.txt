@@ -1,0 +1,8 @@
+cmake_minimum_required(VERSION 3.10)
+project(stringexplosion)
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+add_library(stringexplosion SHARED src/stringexplosion.cpp)
+add_executable(exptest src/exptest.cpp)
+target_link_libraries(exptest stringexplosion)
+set_property(TARGET stringexplosion PROPERTY CXX_EXTENSIONS OFF)
+set_property(TARGET stringexplosion PROPERTY CXX_STANDARD 17)
