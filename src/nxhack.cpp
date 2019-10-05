@@ -38,14 +38,16 @@ int main(int argc, char **argv) {
 		std::exit(1);
 	}
 
+	//Bootstrap all of the commands from the plugins using known symbols.
+	//Skips the C style ugliness and allows for the prettier C++ functional style to take hold.
 	for(auto& p : fs::directory_iterator("plugins")) {
 		tempHandle = dlopen(p.path().c_str(), RTLD_LAZY);
 		handleMap[p.path().filename()] = tempHandle;
-		tempFunction = dlsym(tempHandle, REGISTERCOMMAND);
-		registerCommand rc = (registerCommand)tempFunction;
+		
+		registerCommand rc = (registerCommand) dlsym(tempHandle, REGISTERCOMMAND);
+		autoexec ax = (autoexec) dlsym(tempHandle, AUTOEXEC);
+
 		rc(&commandFunctionMap);
-		tempFunction = dlsym(tempHandle, AUTOEXEC);
-		autoexec ax = (autoexec) tempFunction;
 		ax(&pme);
 	}
 
