@@ -31,7 +31,6 @@ int main(int argc, char **argv) {
 	se::exploder exp(' ', true);
 
 	void* tempHandle;
-	void* tempFunction;
 
 	if(!fs::exists("plugins") || fs::is_empty("plugins")) {
 		std::cerr << "Plugins folder doesn't exist or is empty, exiting." << std::endl;
