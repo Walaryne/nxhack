@@ -19,23 +19,39 @@ std::map<unsigned long, std::pair<int, int>> teleportMap;
 unsigned long addr;
 
 void autoexec(xeno::ProcessMemoryEditor* pme) {
-	addr = pme->readProcessMemory<unsigned long>(0x374030, true);
+	try {
+		addr = pme->readProcessMemory<unsigned long>(0x374030, true);
+	} catch(std::runtime_error& e) {
+		std::cerr << e.what() << "\n";
+	}
 }
 
 void teleport(xeno::ProcessMemoryEditor* pme, std::vector<std::string>* commandvec) {
-	tempX = pme->readProcessMemory<int>(addr + 0x14, false);
-	tempY = pme->readProcessMemory<int>(addr + 0x18, false);
+	try {
+		tempX = pme->readProcessMemory<int>(addr + 0x14, false);
+		tempY = pme->readProcessMemory<int>(addr + 0x18, false);
+	} catch(std::runtime_error &e) {
+		std::cerr << e.what() << "\n";
+	}
 	std::cout << "Currently at X: " << tempX << ", Y: " << tempY << "\n";
 	tempX = teleportMap[currentTeleportSlot].first;
 	tempY = teleportMap[currentTeleportSlot].second;
-	pme->writeProcessMemory<int>(addr + 0x14, &tempX, false);
-	pme->writeProcessMemory<int>(addr + 0x18, &tempY, false);
+	try {
+		pme->writeProcessMemory<int>(addr + 0x14, &tempX, false);
+		pme->writeProcessMemory<int>(addr + 0x18, &tempY, false);
+	} catch(std::runtime_error& e) {
+		std::cerr << e.what() << "\n";
+	}
 	std::cout << "Teleported to X: " << tempX << ", Y: " << tempY << "\n";
 }
 
 void saveloc(xeno::ProcessMemoryEditor* pme, std::vector<std::string>* commandvec) {
-	tempX = pme->readProcessMemory<int>(addr + 0x14, false);
-	tempY = pme->readProcessMemory<int>(addr + 0x18, false);
+	try {
+		tempX = pme->readProcessMemory<int>(addr + 0x14, false);
+		tempY = pme->readProcessMemory<int>(addr + 0x18, false);
+	} catch(std::runtime_error& e) {
+		std::cerr << e.what() << "\n";
+	}
 	tempPair = std::make_pair(tempX, tempY);
 	teleportMap[currentTeleportSlot] = tempPair;
 	std::cout << "Saved location X: " << tempX << ", Y: " << tempY << " to slot " << currentTeleportSlot << "\n";

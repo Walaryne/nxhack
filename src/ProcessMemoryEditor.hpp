@@ -8,6 +8,8 @@
 #ifndef PROCESSMEMORYEDITOR_HPP_
 #define PROCESSMEMORYEDITOR_HPP_
 #include <iostream>
+#include <cerrno>
+#include <cstring>
 #include <sys/uio.h>
 #include <proc/readproc.h>
 
@@ -67,7 +69,7 @@ public:
 		nread = process_vm_readv(_pid, &local, 1, &remote, 1, 0);
 		if(nread != sizeof(retval)) {
 			std::cerr << "Error: No bytes could be read from given location -- hint: use sudo?" << std::endl;
-			return -1;
+			throw std::runtime_error("process_vm_readv: " + std::string(std::strerror(errno)));
 		} else {
 			return retval;
 		}
@@ -101,7 +103,7 @@ public:
 		nread = process_vm_writev(_pid, &local, 1, &remote, 1, 0);
 		if(nread != sizeof(*value)) {
 			std::cerr << "Error: No bytes could be read from given location -- hint: use sudo?" << std::endl;
-			return -1;
+			throw std::runtime_error("process_vm_writev: " + std::string(std::strerror(errno)));
 		} else {
 			return 0;
 		}
