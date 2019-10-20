@@ -55,7 +55,6 @@ namespace se {
 			} else {
 				start = clocsv[i - 1] + 1; //Start is the previous separator's pos plus one
 				count = clocsv[i] - start; //Count is the current separator's pos minus the starting pos
-				std::cerr << "Count is: " << count << std::endl;
 			}
 			exploded.push_back(expstr.substr(start, count));
 		}
