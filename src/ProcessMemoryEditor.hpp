@@ -31,6 +31,8 @@ namespace xeno {
 class ProcessMemoryEditor {
 
 public:
+
+	ProcessMemoryEditor() {};
 	//Constructor taking the PID of another process as an argument
 	//ProcessMemoryEditor(pid_t pid)
 	ProcessMemoryEditor(pid_t pid) {
@@ -108,6 +110,10 @@ public:
 			return 0;
 		}
 	}
+
+	void setPid(pid_t pid);
+
+	pid_t getPid();
 
 private:
 	pid_t _pid;

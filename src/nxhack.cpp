@@ -5,6 +5,7 @@
 #include <map>
 #include <dlfcn.h>
 #include "ProcessMemoryEditor.hpp"
+#include "CommandRegistry.hpp"
 #include "symbols.hpp"
 #include "../StringExplosion/src/stringexplosion.hpp"
 
@@ -21,14 +22,13 @@ int main(int argc, char **argv) {
 		pid = std::stoi(std::string(argv[1]));
 	}
 
-	std::map<std::string, std::function<void(xeno::ProcessMemoryEditor*, std::vector<std::string>*)>> commandFunctionMap;
 	std::map<std::string, void*> handleMap;
 
 	std::string input {};
 	std::vector<std::string> commandvec;
 
-	xeno::ProcessMemoryEditor pme(pid);
 	se::exploder exp(' ', true);
+	xeno::CommandRegistry cr;
 
 	void* tempHandle;
 
@@ -46,8 +46,8 @@ int main(int argc, char **argv) {
 		registerCommand rc = (registerCommand) dlsym(tempHandle, REGISTERCOMMAND);
 		autoexec ax = (autoexec) dlsym(tempHandle, AUTOEXEC);
 
-		rc(&commandFunctionMap);
-		ax(&pme);
+		rc(cr);
+		ax(pid);
 	}
 
 	while(true) {
@@ -65,8 +65,8 @@ int main(int argc, char **argv) {
 		}
 
 		try {
-			std::function func = commandFunctionMap.at(commandvec.front());
-			func(&pme, &commandvec);
+			std::function func = cr.getFunction(commandvec.front());
+			func(&commandvec);
 		} catch(std::out_of_range &e) {
 			std::cout << "Unknown Command" << "\n";
 			continue;

@@ -7,6 +7,7 @@
 //#include <X11/keysym.h>
 //#include <X11/Xresource.h>
 #include "ProcessMemoryEditor.hpp"
+#include "CommandRegistry.hpp"
 
 
 int tempX;
@@ -18,18 +19,21 @@ std::map<unsigned long, std::pair<int, int>> teleportMap;
 
 unsigned long addr;
 
-void autoexec(xeno::ProcessMemoryEditor* pme) {
+xeno::ProcessMemoryEditor pme;
+
+void autoexec(pid_t pid) {
+	pme.setPid(pid);
 	try {
-		addr = pme->readProcessMemory<unsigned long>(0x374030, true);
+		addr = pme.readProcessMemory<unsigned long>(0x374030, true);
 	} catch(std::runtime_error& e) {
 		std::cerr << e.what() << "\n";
 	}
 }
 
-void teleport(xeno::ProcessMemoryEditor* pme, std::vector<std::string>* commandvec) {
+void teleport(std::vector<std::string>* commandvec) {
 	try {
-		tempX = pme->readProcessMemory<int>(addr + 0x14, false);
-		tempY = pme->readProcessMemory<int>(addr + 0x18, false);
+		tempX = pme.readProcessMemory<int>(addr + 0x14, false);
+		tempY = pme.readProcessMemory<int>(addr + 0x18, false);
 	} catch(std::runtime_error &e) {
 		std::cerr << e.what() << "\n";
 	}
@@ -37,18 +41,18 @@ void teleport(xeno::ProcessMemoryEditor* pme, std::vector<std::string>* commandv
 	tempX = teleportMap[currentTeleportSlot].first;
 	tempY = teleportMap[currentTeleportSlot].second;
 	try {
-		pme->writeProcessMemory<int>(addr + 0x14, &tempX, false);
-		pme->writeProcessMemory<int>(addr + 0x18, &tempY, false);
+		pme.writeProcessMemory<int>(addr + 0x14, &tempX, false);
+		pme.writeProcessMemory<int>(addr + 0x18, &tempY, false);
 	} catch(std::runtime_error& e) {
 		std::cerr << e.what() << "\n";
 	}
 	std::cout << "Teleported to X: " << tempX << ", Y: " << tempY << "\n";
 }
 
-void saveloc(xeno::ProcessMemoryEditor* pme, std::vector<std::string>* commandvec) {
+void saveloc(std::vector<std::string>* commandvec) {
 	try {
-		tempX = pme->readProcessMemory<int>(addr + 0x14, false);
-		tempY = pme->readProcessMemory<int>(addr + 0x18, false);
+		tempX = pme.readProcessMemory<int>(addr + 0x14, false);
+		tempY = pme.readProcessMemory<int>(addr + 0x18, false);
 	} catch(std::runtime_error& e) {
 		std::cerr << e.what() << "\n";
 	}
@@ -57,17 +61,17 @@ void saveloc(xeno::ProcessMemoryEditor* pme, std::vector<std::string>* commandve
 	std::cout << "Saved location X: " << tempX << ", Y: " << tempY << " to slot " << currentTeleportSlot << "\n";
 }
 
-void slot(xeno::ProcessMemoryEditor* pme, std::vector<std::string>* commandvec) {
+void slot(std::vector<std::string>* commandvec) {
 	currentTeleportSlot = std::stoi(commandvec->at(1));
 }
 
-void getslot(xeno::ProcessMemoryEditor* pme, std::vector<std::string>* commandvec) {
+void getslot(std::vector<std::string>* commandvec) {
 	std::cout << "Current teleport slot: " << currentTeleportSlot << "\n";
 }
 
-void registerCommand(std::map<std::string, std::function<void(xeno::ProcessMemoryEditor*, std::vector<std::string>*)>>* commandFunctionMap) {
-	commandFunctionMap->operator[]("teleport") = std::function(teleport);
-	commandFunctionMap->operator[]("saveloc") = std::function(saveloc);
-	commandFunctionMap->operator[]("slot") = std::function(slot);
-	commandFunctionMap->operator[]("getslot") = std::function(getslot);
+void registerCommand(xeno::CommandRegistry& cr) {
+	cr.addCommand("teleport", teleport);
+	cr.addCommand("saveloc", saveloc);
+	cr.addCommand("slot", slot);
+	cr.addCommand("getslot", getslot);
 }

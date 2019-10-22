@@ -1,14 +1,15 @@
 #ifndef SYMBOLS_HPP_
 #define SYMBOLS_HPP_
 
-#define REGISTERCOMMAND "_Z15registerCommandPSt3mapINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt8functionIFvPN4xeno19ProcessMemoryEditorEPSt6vectorIS5_SaIS5_EEEESt4lessIS5_ESaISt4pairIKS5_SF_EEE"
-#define AUTOEXEC "_Z8autoexecPN4xeno19ProcessMemoryEditorE"
+#define REGISTERCOMMAND "_Z15registerCommandRN4xeno15CommandRegistryE"
+#define AUTOEXEC "_Z8autoexeci"
 
-#include "ProcessMemoryEditor.hpp"
 #include <map>
 #include <functional>
+#include "ProcessMemoryEditor.hpp"
+#include "CommandRegistry.hpp"
 
-typedef void (*registerCommand)(std::map<std::string, std::function<void(xeno::ProcessMemoryEditor*, std::vector<std::string>*)>>*);
-typedef void (*autoexec)(xeno::ProcessMemoryEditor* pme);
+typedef void (*registerCommand)(xeno::CommandRegistry& cr);
+typedef void (*autoexec)(pid_t pid);
 
 #endif /* SYMBOLS_HPP_ */
