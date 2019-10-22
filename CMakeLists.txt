@@ -9,10 +9,12 @@ add_subdirectory(StringExplosion)
 
 add_executable(nxhack src/nxhack.cpp src/CommandRegistry.cpp)
 target_link_libraries(nxhack procps dl stringexplosion)
+target_compile_options(nxhack PUBLIC -pedantic)
 
 add_library(teleport SHARED src/teleport.cpp src/CommandRegistry.cpp src/ProcessMemoryEditor.cpp)
 target_link_libraries(teleport X11)
 target_include_directories(nxhack PUBLIC StringExplosion/src)
+target_compile_options(teleport PUBLIC -pedantic)
 
 set_property(TARGET nxhack PROPERTY CXX_EXTENSIONS OFF)
 set_property(TARGET nxhack PROPERTY CXX_STANDARD 17)
