@@ -62,7 +62,13 @@ void saveloc(std::vector<std::string>* commandvec) {
 }
 
 void slot(std::vector<std::string>* commandvec) {
-	currentTeleportSlot = std::stoi(commandvec->at(1));
+	try {
+		currentTeleportSlot = std::stoi(commandvec->at(1));
+	} catch(std::out_of_range& e) {
+		std::cout << "Argument would overflow an unsigned long! (Jeez step it down a bit ey?)\n";
+	} catch(std::invalid_argument& e) {
+		std::cout << "Argument isn't a number!\n";
+	}
 }
 
 void getslot(std::vector<std::string>* commandvec) {

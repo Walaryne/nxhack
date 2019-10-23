@@ -68,7 +68,7 @@ int main(int argc, char **argv) {
 			std::function func = cr.getFunction(commandvec.front());
 			func(&commandvec);
 		} catch(std::out_of_range &e) {
-			std::cout << "Unknown Command" << "\n";
+			std::cout << "Unknown Command\n";
 			continue;
 		}
 	}
