@@ -8,6 +8,7 @@ void ProcessMemoryEditor::setPid(pid_t pid) {
 	pid_t pidlist[2] {pid, 0};
 	proc_t** prt = readproctab(PROC_FILLSTAT | PROC_PID, pidlist);
 	_target_base_address = prt[0]->start_code;
+	return;
 }
 
 pid_t ProcessMemoryEditor::getPid() {

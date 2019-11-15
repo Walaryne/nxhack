@@ -3,9 +3,11 @@
 #include <functional>
 #include <filesystem>
 #include <map>
+#include <memory>
 #include <dlfcn.h>
 #include "ProcessMemoryEditor.hpp"
 #include "CommandRegistry.hpp"
+#include "KeyBind.hpp"
 #include "symbols.hpp"
 #include "../StringExplosion/src/stringexplosion.hpp"
 
@@ -25,7 +27,9 @@ int main(int argc, char **argv) {
 	std::map<std::string, void*> handleMap;
 
 	std::string input {};
-	std::vector<std::string> commandvec;
+	std::unique_ptr<std::vector<std::string>> up(new std::vector<std::string>);
+	std::vector<std::string>* commandvec = up.get();
+
 
 	se::exploder exp(' ', true);
 	xeno::CommandRegistry cr;
@@ -50,23 +54,30 @@ int main(int argc, char **argv) {
 		ax(pid);
 	}
 
+	KeyBind<void, decltype(commandvec)> kb1(XK_space, XCB_MOD_MASK_CONTROL, cr.getFunction("teleport"));
+	kb1(commandvec);
+	kb1.~KeyBind();
+	KeyBind<void, decltype(commandvec)> kb2(XK_space, XCB_MOD_MASK_SHIFT, cr.getFunction("teleport"));
+	kb2(commandvec);
+	kb2.~KeyBind();
+
 	while(true) {
 		std::cout << ">: ";
 		std::getline(std::cin, input);
 		exp.load(input);
 		try {
-			commandvec = exp.explode();
+			*commandvec = exp.explode();
 		} catch(se::exploderex &e) {
 			continue;
 		}
 
-		if(commandvec.front() == "exit") {
+		if(commandvec->front() == "exit") {
 			std::exit(0);
 		}
 
 		try {
-			std::function func = cr.getFunction(commandvec.front());
-			func(&commandvec);
+			std::function func = cr.getFunction(commandvec->front());
+			func(commandvec);
 		} catch(std::out_of_range &e) {
 			std::cout << "Unknown Command\n";
 			continue;

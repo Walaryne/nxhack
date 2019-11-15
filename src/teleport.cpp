@@ -62,6 +62,10 @@ void saveloc(std::vector<std::string>* commandvec) {
 }
 
 void slot(std::vector<std::string>* commandvec) {
+	if(commandvec->size() < 2) {
+		std::cout << "Need a numerical argument! (e.g 1, 2...)\n";
+		return;
+	}
 	try {
 		currentTeleportSlot = std::stoi(commandvec->at(1));
 	} catch(std::invalid_argument& e) {

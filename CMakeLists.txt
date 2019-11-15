@@ -8,11 +8,10 @@ set(EXECUTABLE_OUTPUT_PATH ./${CMAKE_BUILD_TYPE})
 add_subdirectory(StringExplosion)
 
 add_executable(nxhack src/nxhack.cpp src/CommandRegistry.cpp)
-target_link_libraries(nxhack procps dl stringexplosion)
-target_compile_options(nxhack PUBLIC -pedantic)
+target_link_libraries(nxhack procps dl stringexplosion pthread xcb xcb-keysyms)
+target_compile_options(nxhack PUBLIC -pedantic -g)
 
 add_library(teleport SHARED src/teleport.cpp src/CommandRegistry.cpp src/ProcessMemoryEditor.cpp)
-target_link_libraries(teleport X11)
 target_include_directories(nxhack PUBLIC StringExplosion/src)
 target_compile_options(teleport PUBLIC -pedantic)
 
